@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>INFO TELS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="tambahan.css" />
+</head>
+<body>
+
+<!-- ================= LAYAR LOGIN SISWA ================= -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card lebar">
+    <div class="login-badge"><img src="telesandi.png" alt="Logo INFO TELS"></div>
+    <h1>INFO TELS</h1>
+    <p class="sub" id="authSub">Masuk dengan akun siswa untuk melihat info kelasmu</p>
+
+    <!-- ===== Masuk ===== -->
+    <div id="loginView">
+      <div class="field">
+        <label for="loginNis">NIS</label>
+        <input type="text" id="loginNis" placeholder="Masukkan NIS..." autocomplete="username" />
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Masukkan password..." autocomplete="current-password" />
+      </div>
+      <p class="login-error" id="loginError"></p>
+
+      <div class="login-actions">
+        <button class="btn-154" id="loginBtn"><span>Masuk</span><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" viewBox="0 0 24 24"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path></svg></button>
+      </div>
+
+      <p class="auth-switch">Belum punya akun? <button type="button" class="link-btn" id="showRegisterBtn">Daftar sekarang</button></p>
+      <p class="auth-switch alt">Guru / admin? <a class="link-btn" href="admin.html">Masuk di sini</a></p>
+    </div>
+
+    <!-- ===== Daftar ===== -->
+    <div id="registerView" hidden>
+      <p class="login-note">Setelah mendaftar, akunmu harus <b>disetujui admin</b> dulu sebelum bisa dipakai masuk.</p>
+      <div class="field">
+        <label for="regNama">Nama lengkap</label>
+        <input type="text" id="regNama" placeholder="Nama sesuai data sekolah" autocomplete="name" maxlength="100" />
+      </div>
+      <div class="field">
+        <label for="regNis">NIS</label>
+        <input type="text" id="regNis" placeholder="4-20 karakter (huruf/angka)" autocomplete="off" maxlength="20" />
+      </div>
+      <div class="field">
+        <label for="regKelas">Kelas</label>
+        <select id="regKelas" required></select>
+      </div>
+      <div class="field">
+        <label for="regPassword">Password</label>
+        <input type="password" id="regPassword" placeholder="Minimal 6 karakter" autocomplete="new-password" />
+      </div>
+      <div class="field">
+        <label for="regConfirm">Ulangi password</label>
+        <input type="password" id="regConfirm" placeholder="Ketik ulang password" autocomplete="new-password" />
+      </div>
+      <p class="login-error" id="registerError"></p>
+
+      <div class="login-actions">
+        <button class="btn-154" id="registerBtn"><span>Daftar</span><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" viewBox="0 0 24 24"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path></svg></button>
+      </div>
+
+      <p class="auth-switch">Sudah punya akun? <button type="button" class="link-btn" id="showLoginBtn">Masuk</button></p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= APLIKASI SISWA ================= -->
+<div id="appScreen" style="display:none;">
+  <header>
+    <div class="topbar">
+      <div class="brand"><span class="brand-badge"><img src="telesandi.png" alt="Logo INFO TELS"></span> INFO TELS</div>
+      <div class="admin-controls">
+        <span class="status-badge" id="statusBadge"></span>
+        <button class="admin-toggle btn-103" id="logoutBtn"><span class="text-103">Keluar</span><span class="icon-103"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
+      </div>
+    </div>
+    <div class="hero">
+      <h1>Info khusus untuk kelasmu</h1>
+      <p id="heroSub">Kamu hanya melihat info untuk kelasmu dan info untuk semua kelas.</p>
+    </div>
+  </header>
+
+  <div class="filter-wrap">
+    <div class="filter-card">
+      <div class="chips" id="chips" role="group" aria-label="Filter kategori"></div>
+    </div>
+  </div>
+
+  <main>
+    <div class="section-label">
+      <h2>Pengumuman Terbaru</h2>
+      <span class="count" id="countLabel"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="emptyState" style="display:none;">
+      <div class="icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h4l1.5 3h5L16 12h4"/><path d="M4 12 5.5 5h13L20 12v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6Z"/></svg>
+      </div>
+      <p>Belum ada pengumuman untuk filter ini.</p>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="common.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

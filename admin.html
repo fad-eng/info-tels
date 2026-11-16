@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>INFO TELS — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="tambahan.css" />
+</head>
+<body>
+
+<!-- ================= LAYAR LOGIN ADMIN ================= -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card lebar">
+    <div class="login-badge"><img src="telesandi.png" alt="Logo INFO TELS"></div>
+    <h1>INFO TELS</h1>
+    <p class="sub" id="authSub">Masuk admin</p>
+
+    <!-- ===== Masuk admin ===== -->
+    <div id="loginView">
+      <div class="field">
+        <label for="loginEmail">Email admin</label>
+        <input type="email" id="loginEmail" placeholder="email@sekolah.sch.id" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Masukkan password..." autocomplete="current-password" />
+      </div>
+      <p class="login-error" id="loginError"></p>
+
+      <div class="login-actions">
+        <button class="btn-154" id="loginBtn"><span>Masuk sebagai Admin</span><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" viewBox="0 0 24 24"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path></svg></button>
+      </div>
+
+      <p class="auth-switch">Belum punya akun admin? <button type="button" class="link-btn" id="showRegisterBtn">Daftar admin</button></p>
+      <p class="auth-switch alt">Siswa? <a class="link-btn" href="index.html">Masuk di sini</a></p>
+    </div>
+
+    <!-- ===== Daftar admin ===== -->
+    <div id="registerView" hidden>
+      <p class="login-note">Pendaftaran admin butuh <b>kode admin</b> dari pengelola sistem.</p>
+      <div class="field">
+        <label for="regNama">Nama lengkap</label>
+        <input type="text" id="regNama" placeholder="Contoh: Bu Sandi" autocomplete="name" maxlength="100" />
+      </div>
+      <div class="field">
+        <label for="regEmail">Email</label>
+        <input type="email" id="regEmail" placeholder="nama@sekolah.sch.id" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="regPassword">Password</label>
+        <input type="password" id="regPassword" placeholder="Minimal 8 karakter" autocomplete="new-password" />
+      </div>
+      <div class="field">
+        <label for="regConfirm">Ulangi password</label>
+        <input type="password" id="regConfirm" placeholder="Ketik ulang password" autocomplete="new-password" />
+      </div>
+      <div class="field">
+        <label for="regKode">Kode admin</label>
+        <input type="text" id="regKode" placeholder="Minta kode ke pengelola sistem" autocomplete="off" />
+      </div>
+      <p class="login-error" id="registerError"></p>
+
+      <div class="login-actions">
+        <button class="btn-154" id="registerBtn"><span>Buat Akun Admin</span><svg xmlns="http://www.w3.org/2000/svg" fill="currentcolor" viewBox="0 0 24 24"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path></svg></button>
+      </div>
+
+      <p class="auth-switch">Sudah punya akun? <button type="button" class="link-btn" id="showLoginBtn">Masuk</button></p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PANEL ADMIN ================= -->
+<div id="appScreen" style="display:none;">
+  <header>
+    <div class="topbar">
+      <div class="brand"><span class="brand-badge"><img src="telesandi.png" alt="Logo INFO TELS"></span> INFO TELS</div>
+      <div class="admin-controls">
+        <span class="status-badge" id="statusBadge"></span>
+        <button class="admin-toggle btn-103" id="logoutBtn"><span class="text-103">Keluar</span><span class="icon-103"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
+      </div>
+    </div>
+    <div class="hero">
+      <h1>Panel admin INFO TELS</h1>
+      <p>Posting pengumuman untuk kelas tertentu, dan verifikasi akun siswa yang mendaftar.</p>
+    </div>
+  </header>
+
+  <div class="filter-wrap">
+    <div class="filter-card">
+      <div class="tabs" role="tablist">
+        <button class="tab active" id="tabPengumuman" role="tab">Pengumuman</button>
+        <button class="tab" id="tabSiswa" role="tab">Verifikasi Siswa <span class="tab-badge" id="pendingBadge">0</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Panel pengumuman ===== -->
+  <main id="panelPengumuman">
+    <div class="panel-bar">
+      <div class="chips" id="chips" role="group" aria-label="Filter kategori"></div>
+      <select id="kelasFilter" aria-label="Filter kelas atau jurusan">
+        <option value="semua">Semua Kelas/Jurusan</option>
+      </select>
+    </div>
+    <div class="section-label">
+      <h2>Pengumuman</h2>
+      <span class="count" id="countLabel"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="emptyState" style="display:none;">
+      <div class="icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h4l1.5 3h5L16 12h4"/><path d="M4 12 5.5 5h13L20 12v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6Z"/></svg>
+      </div>
+      <p>Belum ada pengumuman untuk filter ini.</p>
+    </div>
+  </main>
+
+  <!-- ===== Panel verifikasi siswa ===== -->
+  <main id="panelSiswa" hidden>
+    <div class="panel-bar">
+      <div class="chips" id="siswaChips" role="group" aria-label="Filter status siswa"></div>
+    </div>
+    <div class="section-label">
+      <h2>Akun Siswa</h2>
+      <span class="count" id="siswaCount"></span>
+    </div>
+    <div class="siswa-list" id="siswaList"></div>
+    <div class="empty" id="siswaEmpty" style="display:none;">
+      <div class="icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6"/></svg>
+      </div>
+      <p>Tidak ada akun siswa untuk status ini.</p>
+    </div>
+  </main>
+
+  <button class="fab show" id="fab" aria-label="Tambah pengumuman baru">
+    <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg>
+  </button>
+
+  <!-- Form buat pengumuman -->
+  <div class="overlay" id="overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h3 id="modalTitle">Buat Pengumuman</h3>
+      <p class="sub">Isi info di bawah. Hanya siswa dari kelas yang dipilih yang bisa melihatnya.</p>
+      <form id="form">
+        <div class="field">
+          <label for="judul">Judul</label>
+          <input id="judul" type="text" placeholder="Contoh: Libur Nasional 17 Agustus" maxlength="150" required />
+        </div>
+        <div class="field">
+          <label for="isi">Isi Pengumuman</label>
+          <textarea id="isi" placeholder="Tulis detail pengumuman di sini..." maxlength="3000" required></textarea>
+        </div>
+        <div class="field">
+          <label for="kategori">Kategori</label>
+          <select id="kategori">
+            <option value="akademik">Akademik</option>
+            <option value="lomba">Lomba</option>
+            <option value="libur">Libur</option>
+            <option value="ekskul">Ekskul</option>
+          </select>
+        </div>
+        <fieldset class="field">
+          <legend>Ditujukan Untuk</legend>
+          <div class="kelas-picker">
+            <label class="kelas-check kelas-check-all">
+              <input type="checkbox" id="kelasAll" checked>
+              <span>Semua Kelas</span>
+            </label>
+            <div class="kelas-groups" id="kelasGroups"></div>
+            <p class="kelas-hint" id="kelasHint"></p>
+          </div>
+        </fieldset>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="cancelBtn">Batal</button>
+          <button type="submit" class="btn btn-primary">Posting</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reset password siswa -->
+  <div class="overlay" id="pwOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+      <h3 id="pwTitle">Reset Password</h3>
+      <p class="sub" id="pwSub">Buat password baru untuk siswa ini, lalu sampaikan ke siswanya.</p>
+      <div class="field">
+        <label for="pwBaru">Password baru</label>
+        <input id="pwBaru" type="text" placeholder="Minimal 6 karakter" autocomplete="off" />
+      </div>
+      <p class="error-msg" id="pwError"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="pwCancelBtn">Batal</button>
+        <button type="button" class="btn btn-primary" id="pwSaveBtn">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Konfirmasi hapus -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+      <div class="icon">
+        <svg width="42" height="42" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4.5A1.5 1.5 0 0 1 9.5 3h1A1.5 1.5 0 0 1 12 4.5V6M6 6l.6 9.4A1.5 1.5 0 0 0 8.1 17h3.8a1.5 1.5 0 0 0 1.5-1.6L14 6"/></svg>
+      </div>
+      <h3 id="confirmTitle">Hapus?</h3>
+      <p id="confirmText">Tindakan ini tidak dapat dibatalkan.</p>
+      <div class="actions">
+        <button class="btn btn-ghost" id="confirmCancelBtn">Batal</button>
+        <button class="btn btn-danger btn-103" id="confirmDeleteBtn"><span class="text-103">Hapus</span><span class="icon-103"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="common.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
